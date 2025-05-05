@@ -3,58 +3,42 @@ import todo_icon from "../assets/todo_icon.png";
 import TodoItem from "./TodoItem";
 
 const Todo = () => {
-    const [todoList, setTodoList] = useState(localStorage.getItem("todos") ? JSON.parse(localStorage.getItem("todos")) : []);
+    const [todoList, setTodoList] = useState([]);
 
-    useEffect(() => {
-        localStorage.setItem("todos", JSON.stringify(todoList))
-    },[todoList])
-
-    const InputRef = useRef();
+    const inputRef = useRef();
 
     const add = () => {
-        const InputText = InputRef.current.value.trim();
+        
+        const inputText = inputRef.current.value.trim();
 
-        if (InputText === "") {
+        if (inputText === "") {
             return null;
         }
 
         const newTodo = {
             id: Date.now(),
-            text: InputText,
+            text: inputText,
             isComplete: false,
-            reminder: ""
         }
 
         setTodoList((prev) => [...prev, newTodo]);
-        InputRef.current.value = "";
-        
+        inputRef.current.value = "";
+
+        console.log({inputText})
+
+    }
+    
+    const deleteTodo = (id) => {
+        setTodoList((prevTodo) => {
+            return prevTodo.filter((todo) => todo.id !== id)
+        })
     }
 
-    const deleteTodo = (id) => {
-        setTodoList((prevTodos) => {
-            return (
-                prevTodos.filter((todo) => todo.id !== id)
-        )
-        });
-
-    };
-
     const toggle = (id) => {
-        setTodoList((prevTodos) => {
-            return prevTodos.map((todo) => {
+        setTodoList((prevTodo) => {
+            return prevTodo.map((todo) => {
                 if (todo.id === id) {
-                    return{...todo, isComplete: !todo.isComplete}
-                }
-                return todo;
-            })
-        })
-    } 
-
-    const updateReminder = (id, newReminder) =>{
-        setTodoList((prevTodos) => {
-            return prevTodos.map((todo) => {
-                if (todo.id === id) {
-                    return{...todo, reminder: newReminder};
+                    return {...todo, isComplete: !todo.isComplete}
                 }
                 return todo;
             })
@@ -77,19 +61,21 @@ const Todo = () => {
 
       <div className="flex items-centerr my-7 bg-gray-200 rounded-full">
         <input
-          ref={InputRef}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-                add()
+        ref={inputRef}
+        onKeyDown={(e) => {
+            if (e.key === "Enter") {
+                add();
             }
-          }}
+        }}
           type="text"
           placeholder="Add Your Task"
           className="bg- border-1 rounded-l-full outline-none
             flex-1 h-14 pl-6 pr-2 placeholder:text-slate-600"
         />
         <button
-            onClick={add}
+            onClick={() => {
+                add()
+            }}
           className="rounded-r-full
             bg-rose-300 w-32 h-14 text-black text-lg
             border-black border-b-1 border-t-1 border-r-1
@@ -103,16 +89,9 @@ const Todo = () => {
 
         <div>
             {todoList.map((item, index) => {
-                return(<TodoItem
-                    key={index}
-                    text={item.text}
-                    id={item.id}
-                    deleteTodo={deleteTodo}
-                    isComplete={item.isComplete}
-                    toggle={toggle}
-                    updateReminder={updateReminder}
-                    reminder={item.reminder} />
-                )
+                return (<TodoItem key={index} text={item.text} id={item.id}
+                    isComplete={item.isComplete} deleteTodo={deleteTodo} 
+                    toggle={toggle} />)
             })}
         </div>
 
