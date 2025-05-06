@@ -1,102 +1,93 @@
-import React, { useEffect, useRef, useState } from "react";
-import todo_icon from "../assets/todo_icon.png";
-import TodoItem from "./TodoItem";
+import React, { useRef, useState, useEffect } from 'react'
+import TodoItem from '../components/TodoItem'
+import todo_icon from '../assets/todo_icon.png'
 
 const Todo = () => {
-    const [todoList, setTodoList] = useState([]);
+  const [todoList, setTodoList] = useState(
+    localStorage.getItem("todos")
+      ? JSON.parse(localStorage.getItem("todos"))
+      : []
+  );
 
-    const inputRef = useRef();
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todoList));
+  }, [todoList]);
 
-    const add = () => {
-        
-        const inputText = inputRef.current.value.trim();
+  const inputRef = useRef();
 
-        if (inputText === "") {
-            return null;
-        }
+  const add = () => {
 
-        const newTodo = {
-            id: Date.now(),
-            text: inputText,
-            isComplete: false,
-        }
+    const inputText = inputRef.current.value.trim();
 
-        setTodoList((prev) => [...prev, newTodo]);
-        inputRef.current.value = "";
-
-        console.log({inputText})
-
+    if (inputText === "") {
+      return null;
     }
+
+    const newTodo = {
+      id: Date.now(),
+      text: inputText,
+      isComplete: false
+    }
+
+    setTodoList((prevTodos) => [...prevTodos, newTodo]);
+    inputRef.current.value = "";
     
-    const deleteTodo = (id) => {
-        setTodoList((prevTodo) => {
-            return prevTodo.filter((todo) => todo.id !== id)
-        })
-    }
 
-    const toggle = (id) => {
-        setTodoList((prevTodo) => {
-            return prevTodo.map((todo) => {
-                if (todo.id === id) {
-                    return {...todo, isComplete: !todo.isComplete}
-                }
-                return todo;
-            })
-        })
-    }
+    console.log({inputText})
+
+  }
+
+  const deleteTodo = (id) => {
+    setTodoList(prevTodos => prevTodos.filter(todo => todo.id !== id));
+  }
+
+  const toggle = (id) => {
+    setTodoList(prevTodos => prevTodos.map(todo => {
+      if (todo.id === id) {
+        return {...todo, isComplete: !todo.isComplete};
+      }
+      return todo;
+    }))
+  }
 
   return (
-    <div
-      className="bg-white w-11/12 flex flex-col p-4 
-    min-h-[550px] place-self-center max-w-md rounded-xl"
-    >
-      {/* ------ title ----- */}
+    <div className='bg-white border-1 rounded-2xl
+     min-w-150 min-h-175
+     flex flex-col m-10'>
 
-      <div className="flex items-center mt-7 gap-2">
-        <img className="w-8" src={todo_icon} alt="icon" />
-        <h1 className="text-3xl font-semibold">To-Do List</h1>
+      {/* ------- title ------- */}
+
+      <div className='m-8 flex flex-row gap-4'>
+        <img className='h-10' src={todo_icon} alt="" />
+        <h1 className='text-4xl'>Todo List</h1>
       </div>
 
       {/* ------ input ------ */}
+      
+      <div className='flex flex-row gap-5'>
 
-      <div className="flex items-centerr my-7 bg-gray-200 rounded-full">
-        <input
-        ref={inputRef}
-        onKeyDown={(e) => {
-            if (e.key === "Enter") {
-                add();
-            }
-        }}
-          type="text"
-          placeholder="Add Your Task"
-          className="bg- border-1 rounded-l-full outline-none
-            flex-1 h-14 pl-6 pr-2 placeholder:text-slate-600"
-        />
-        <button
-            onClick={() => {
-                add()
-            }}
-          className="rounded-r-full
-            bg-rose-300 w-32 h-14 text-black text-lg
-            border-black border-b-1 border-t-1 border-r-1
-            transition-all font-medium cursor-pointer"
-        >
-          ADD +
-        </button>
+      <input onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          add()
+        }
+      }}
+       ref={inputRef} type="text" className='border-1 ml-8 p-3 rounded-[5px] w-75
+      hover:scale-102 transition-all'/>
+      <button onClick={add} className='border-1 rounded-[5px] p-3 w-30 bg-black text-white
+      hover:scale-105 transition-all'>Submit</button>
+
       </div>
 
-      {/* --------- todo --------- */}
+      {/* ------- Todo -------- */}
 
-        <div>
-            {todoList.map((item, index) => {
-                return (<TodoItem key={index} text={item.text} id={item.id}
-                    isComplete={item.isComplete} deleteTodo={deleteTodo} 
-                    toggle={toggle} />)
-            })}
-        </div>
+      <div>
+        {todoList.map((item, index) => {
+          return <TodoItem key={index} text={item.text} id={item.id} isComplete={item.isComplete} deleteTodo={deleteTodo} toggle={toggle}/>
+        })}
+      </div>
 
-    </div>
-  );
-};
+     </div>
+  )
+}
 
-export default Todo;
+export default Todo
