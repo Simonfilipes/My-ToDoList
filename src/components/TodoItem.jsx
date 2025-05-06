@@ -7,7 +7,7 @@ const TodoItem = ({text, id, isComplete, deleteTodo, toggle}) => {
       toggle(id);
     }}  
     className='cursor-pointer m-8 flex flex-row justify-between border-b border-gray-400 p-3
-    hover:scale-102 transition-all'>
+    hover:scale-101 transition-all'>
 
     <div 
     className='flex flex-row items-center gap-3'>
