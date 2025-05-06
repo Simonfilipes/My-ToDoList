@@ -51,20 +51,9 @@ const Todo = () => {
   }
 
   return (
-    <div className='
-    bg-white border border-gray-200 rounded-2xl
-    w-[85vw] max-w-[600px]  // Mobile: ocupa 85% da tela, mas não passa de 400px
-    sm:w-[550px]            // Tablet: largura fixa de 300px
-    md:w-[850px]            // Desktop médio: 350px
-    lg:w-[800px]            // Desktop grande: 400px
-    min-h-[150px]           // Altura mínima mobile
-    sm:min-h-[175px]        // Altura mínima maior em telas maiores
-    flex flex-col
-    mx-auto my-4            // Centraliza no mobile
-    sm:mx-6 sm:my-6         // Tablet: margem maior
-    md:mx-8 md:my-8         // Desktop médio: margem maior
-    lg:mx-10 lg:my-10       // Desktop grande: margem máxima
-'>
+    <div className='bg-white border-1 rounded-2xl
+     min-h-175 w-75 sm:w-125 md:w-150
+     flex flex-col m-10'>
 
       {/* ------- title ------- */}
 
@@ -82,9 +71,9 @@ const Todo = () => {
           add()
         }
       }}
-       ref={inputRef} type="text" className='border-1 ml-8 p-3 rounded-[5px] w-75
+       ref={inputRef} type="text" className='border-1 ml-8 p-3 rounded-[5px] min-w-15 w-75
       hover:scale-102 transition-all'/>
-      <button onClick={add} className='border-1 rounded-[5px] p-3 w-30 bg-black text-white
+      <button onClick={add} className='border-1 rounded-[5px] p-3 w-20 bg-black text-white
       hover:scale-105 transition-all mr-5'>Submit</button>
 
       </div>
