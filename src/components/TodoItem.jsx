@@ -6,7 +6,8 @@ const TodoItem = ({text, id, isComplete, deleteTodo, toggle}) => {
     <div onClick={() => {
       toggle(id);
     }}  
-    className='cursor-pointer m-8 flex flex-row justify-between border-b border-gray-400 p-3'>
+    className='cursor-pointer m-8 flex flex-row justify-between border-b border-gray-400 p-3
+    hover:scale-102 transition-all'>
 
     <div 
     className='flex flex-row items-center gap-3'>
